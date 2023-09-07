@@ -2,7 +2,6 @@ from fastapi import FastAPI
 import models
 from database import engine
 from routers import auth, admin, users, houses, squares, cities, house_features
-from cors_middleware import cors_middleware  # Assicurati che il percorso sia corretto
 
 
 
