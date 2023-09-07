@@ -4,7 +4,7 @@ from fastapi.middleware.cors import CORSMiddleware
 app = FastAPI()
 
 # Configura il middleware CORS
-origins = ["http://localhost:4200"]  # Specifica l'origine consentita per il CORS
+origins = ["*"]  # Specifica l'origine consentita per il CORS
 
 app.add_middleware(
     CORSMiddleware,
