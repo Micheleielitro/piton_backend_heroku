@@ -11,7 +11,7 @@ app = FastAPI()
 models.Base.metadata.create_all(bind=engine)
 
 
-app.add_middleware(cors_middleware)
+
 app.include_router(admin.router)
 app.include_router(users.router)
 app.include_router(auth.router)
