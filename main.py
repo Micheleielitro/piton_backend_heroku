@@ -28,8 +28,3 @@ app.include_router(house_features.router)
 app.include_router(squares.router)
 app.include_router(cities.router)
 
-
-#Start server uvicorn
-if __name__ == "__main__":
-    import uvicorn
-    uvicorn.run(app, host='localhost', port=8000)
