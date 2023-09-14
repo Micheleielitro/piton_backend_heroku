@@ -5,7 +5,7 @@ from pydantic import BaseModel
 from sqlalchemy.orm import Session
 from starlette import status
 from database import SessionLocal
-from models import Users
+from models import Users, CreateUserRequest, Token
 from passlib.context import CryptContext
 from fastapi.security import OAuth2PasswordRequestForm, OAuth2PasswordBearer
 import jwt
@@ -23,18 +23,7 @@ bcrypt_context = CryptContext(schemes=['bcrypt'], deprecated='auto')
 oauth2_bearer = OAuth2PasswordBearer(tokenUrl='auth/token')
 
 
-class CreateUserRequest(BaseModel):
-    username: str
-    email: str
-    first_name: str
-    last_name: str
-    password: str
-    role: str
 
-
-class Token(BaseModel):
-    access_token: str
-    token_type: str
 
 
 db_dependency = Annotated[Session, Depends(get_db)]
@@ -71,19 +60,27 @@ async def get_current_user(token: Annotated[str, Depends(oauth2_bearer)]):
 
 
 @router.post("/", status_code=status.HTTP_201_CREATED)
-async def create_user(db: db_dependency,
-                      create_user_request: CreateUserRequest):
-    #da inserire verifica email non ancora in uso
+async def create_user(db: db_dependency, create_user_request: CreateUserRequest):
     try:
         verify_email(db, create_user_request.email)
     except:
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail='Email not valid.')
+
     create_user_model = Users(
         email=create_user_request.email,
         username=create_user_request.username,
         first_name=create_user_request.first_name,
         last_name=create_user_request.last_name,
         role=create_user_request.role,
+        accommodationType=create_user_request.accommodationType,
+        currentCity=create_user_request.currentCity,
+        currentState=create_user_request.currentState,
+        currentStreet=create_user_request.currentStreet,
+        currentZone=create_user_request.currentZone,
+        desiredCity=create_user_request.desiredCity,
+        desiredState=create_user_request.desiredState,
+        desiredStreet=create_user_request.desiredStreet,
+        desiredZone=create_user_request.desiredZone,
         hashed_password=bcrypt_context.hash(create_user_request.password),
         is_active=True
     )

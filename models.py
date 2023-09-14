@@ -1,6 +1,30 @@
 from database import Base
 from sqlalchemy import Column, Integer, String, Boolean, ForeignKey
+from sqlalchemy.orm import relationship
+from pydantic import BaseModel
 
+
+
+class CreateUserRequest(BaseModel):
+    username: str
+    email: str
+    first_name: str
+    last_name: str
+    password: str
+    role: str
+    accommodationType: bool
+    currentCity: str
+    currentState: str
+    currentStreet: str
+    currentZone: str
+    desiredCity: str
+    desiredState: str
+    desiredStreet: str
+    desiredZone: str
+
+class Token(BaseModel):
+    access_token: str
+    token_type: str
 
 class Users(Base):
     __tablename__ = 'users'
@@ -13,11 +37,19 @@ class Users(Base):
     hashed_password = Column(String)
     is_active = Column(Boolean, default=True)
     role = Column(String)
-
+    accommodationType = Column(Boolean, default=False)
+    currentCity=Column(String)
+    currentState=Column(String)
+    currentStreet=Column(String)
+    currentZone=Column(String)
+    desiredCity=Column(String)
+    desiredState=Column(String)
+    desiredStreet=Column(String)
+    desiredZone=Column(String)
 
 class Houses(Base):
     __tablename__ = 'houses'
-    
+
     id = Column(Integer, primary_key=True, index=True)
     title = Column(String)
     description = Column(String)
@@ -36,20 +68,18 @@ class Houses(Base):
 
 class Squares(Base):
     __tablename__ = 'squares'
-    
+
     id = Column(Integer, primary_key=True, index=True)
     title = Column(String)
     city = Column(String)
     province = Column(String)
     average_rent = Column(Integer)
     offers_num = Column(Integer)
-    
-    
+
 class Cities(Base):
     __tablename__ = 'cities'
-    
+
     id = Column(Integer, primary_key=True, index=True)
     title = Column(String)
     province = Column(String)
     offers_num = Column(Integer)
-    
